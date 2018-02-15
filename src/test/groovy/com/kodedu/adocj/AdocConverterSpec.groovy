@@ -1,5 +1,7 @@
 package com.kodedu.adocj
 
+import java.nio.file.Paths
+
 import spock.lang.Specification
 
 /*
@@ -16,19 +18,52 @@ import spock.lang.Specification
 
 class AdocConverterSpec extends Specification{
 
-	def "generate document from correct asciidoc content"() {
-		expect:
-		name.size() == length
+	def "Generate document from DocWithoutPluginStatements.adoc with default options"() {
+		
+		when: "DocWithoutPluginStatements.adoc content is loaded"
+		
+		def fileName = "DocWithoutPluginStatements"
+		def fileExt = ".adoc"
+		
+		then: "generate a pdf, html, ebook, epub, mobi file."
+		
+		and : "Check if the generated file exists"
+		Paths.get(name).toFile().exists() == true
+		
+		and : "Check if the generated file size is higher than zero byte"
+		Paths.get(name).toFile().length() > 0
 
 		where:
-		name     | length
-		"Spock"  | 5
-		"Kirk"   | 4
-		"Scotty" | 6
+		name  << [fileName+".pdf", fileName+".html", fileName+".ebook"]                            
+		 
 	}
 	
-	def "throw Exception when content is bad"(){
+	def "Generate presentation from DocWithoutPluginStatements.adoc with default options"() {
 		
+		when: "DocWithoutPluginStatements.adoc content is loaded"
+		
+		def fileName = "DocWithoutPluginStatements"
+		def fileExt = ".adoc"
+		
+		then: "generate a reveal and toto presentation."
+		
+		and : "Check if the generated file exists"
+		Paths.get(name).toFile().exists() == true
+		
+		and : "Check if the generated file size is higher than zero byte"
+		Paths.get(name).toFile().length() > 0
+
+		where:
+		name  << [fileName+".html", fileName+".html"]
+		
+	}
+	
+	def "Generate document from DocWithoutPluginStatements.adoc with options"(){
+		
+	}
+	
+	def "Generate presentation from DocWithoutPluginStatements.adoc with options"(){
+	
 	}
 	
 	
