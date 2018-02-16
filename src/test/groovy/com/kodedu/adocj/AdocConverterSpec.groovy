@@ -2,6 +2,8 @@ package com.kodedu.adocj
 
 import java.nio.file.Paths
 
+import com.kodedu.service.converter.AdocConverter
+
 import spock.lang.Specification
 
 /*
@@ -18,23 +20,30 @@ import spock.lang.Specification
 
 class AdocConverterSpec extends Specification{
 
-	def "Generate document from DocWithoutPluginStatements.adoc with default options"() {
+	def "Generate document from DocWithoutPluginStatements.adoc content with default options"() {
 		
 		when: "DocWithoutPluginStatements.adoc content is loaded"
 		
 		def fileName = "DocWithoutPluginStatements"
 		def fileExt = ".adoc"
 		
-		then: "generate a pdf, html, ebook, epub, mobi file."
+		String adocContent = new File("src/test/resources/DocWithoutPluginStatements.adoc").text;		
+		
+		then: "generate a pdf file."
+		
+		AdocConverter converter = AdocConverter.Factory.create();
+		
+		converter.convert(adocContent, AdocConverter.OptionsBuilder.options().basedir("target").toFile(new File("DocWithoutPluginStatements.pdf")).backend("pdf"));
 		
 		and : "Check if the generated file exists"
-		Paths.get(name).toFile().exists() == true
+		Paths.get("target/"+name).toFile().exists() == true
 		
 		and : "Check if the generated file size is higher than zero byte"
-		Paths.get(name).toFile().length() > 0
+		Paths.get("target/"+name).toFile().length() > 0
 
 		where:
-		name  << [fileName+".pdf", fileName+".html", fileName+".ebook"]                            
+		name  = "DocWithoutPluginStatements.pdf";
+		//name  << ["DocWithoutPluginStatements.pdf", "DocWithoutPluginStatements.html", "DocWithoutPluginStatements.ebook"]                            
 		 
 	}
 	
