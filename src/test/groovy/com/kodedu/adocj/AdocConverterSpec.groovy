@@ -1,9 +1,12 @@
 package com.kodedu.adocj
 
+import java.nio.file.Files
 import java.nio.file.Paths
+import java.nio.file.StandardCopyOption
 
 import com.kodedu.service.converter.AdocConverter
 
+import spock.lang.Ignore
 import spock.lang.Specification
 
 /*
@@ -19,34 +22,77 @@ import spock.lang.Specification
  */
 
 class AdocConverterSpec extends Specification{
-
-	def "Generate document from DocWithoutPluginStatements.adoc content with default options"() {
+	
+	def File workingDir = new File("/home/coder/git/AsciidocFX-aurel");
+	
+	def "Generate document from DocWithoutPluginStatements.adoc file with default options"() {
 		
-		when: "DocWithoutPluginStatements.adoc content is loaded"
-		
-		def fileName = "DocWithoutPluginStatements"
-		def fileExt = ".adoc"
-		
-		String adocContent = new File("src/test/resources/DocWithoutPluginStatements.adoc").text;		
-		
+		when: "DocWithoutPluginStatements.adoc file is loaded"
+				
+		File fileToProcess = getFileToProcess()
+				
 		then: "generate a pdf file."
 		
-		AdocConverter converter = AdocConverter.Factory.create();
+		AdocConverter converter = AdocConverter.Factory.create(AdocConverter.Backend.PDF)
 		
-		converter.convert(adocContent, AdocConverter.OptionsBuilder.options().basedir("target").toFile(new File("DocWithoutPluginStatements.pdf")).backend("pdf"));
+		String result = converter.convertFile(fileToProcess)
 		
 		and : "Check if the generated file exists"
-		Paths.get("target/"+name).toFile().exists() == true
+		Paths.get(outputPath).toFile().exists() == true
 		
 		and : "Check if the generated file size is higher than zero byte"
-		Paths.get("target/"+name).toFile().length() > 0
+		Paths.get(outputPath).toFile().text.length() > 0
 
 		where:
-		name  = "DocWithoutPluginStatements.pdf";
+		outputPath  = "target/test/DocWithoutPluginStatements.pdf";
 		//name  << ["DocWithoutPluginStatements.pdf", "DocWithoutPluginStatements.html", "DocWithoutPluginStatements.ebook"]                            
 		 
 	}
 	
+	def File getFileToProcess() {
+		
+		File adocFileBackup = new File("./src/test/resources/DocWithoutPluginStatements.adoc")
+						
+		File adocFileToProcess = new File(workingDir.getPath()+"/target/test/"+adocFileBackup.getName())
+		
+		adocFileToProcess.mkdirs()
+				
+		Files.copy(Paths.get(adocFileBackup.getPath()), Paths.get(adocFileToProcess.getPath()), StandardCopyOption.REPLACE_EXISTING)
+		
+		adocFileToProcess 
+		
+	}
+	
+	
+	def "Generate document from DocWithoutPluginStatements.adoc content with default options"() {
+		
+		when: "DocWithoutPluginStatements.adoc content is loaded"
+		
+		File fileToProcess = getFileToProcess()
+				
+		String adocContent = fileToProcess.getText()
+		
+		then: "generate a pdf file."
+		
+		AdocConverter converter = AdocConverter.Factory.create(AdocConverter.Backend.PDF)
+		
+		File output = new File(fileToProcess.getParent()+File.separator+"toto.pdf");
+		
+		String result = converter.convertContentToFile(adocContent, output)
+		
+		and : "Check if the generated file exists"
+		Paths.get(outputPath).toFile().exists() == true
+		
+		and : "Check if the generated file size is higher than zero byte"
+		Paths.get(outputPath).toFile().text.length() > 0
+
+		where:
+		outputPath  = "target/test/toto.pdf";
+		////name  << ["DocWithoutPluginStatements.pdf", "DocWithoutPluginStatements.html", "DocWithoutPluginStatements.ebook"]
+		 
+	}
+	
+	/*
 	def "Generate presentation from DocWithoutPluginStatements.adoc with default options"() {
 		
 		when: "DocWithoutPluginStatements.adoc content is loaded"
@@ -73,7 +119,7 @@ class AdocConverterSpec extends Specification{
 	
 	def "Generate presentation from DocWithoutPluginStatements.adoc with options"(){
 	
-	}
+	}*/
 	
 	
 }

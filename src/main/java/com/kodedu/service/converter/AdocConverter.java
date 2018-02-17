@@ -1,22 +1,35 @@
 package com.kodedu.service.converter;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 public interface AdocConverter {
 	
-	String convert(String content, OptionsBuilder builder);
+	//String convert(String content, OptionsBuilder builder);
+	
+	String convertFile(File file);
+	
+	String convertContentToFile(String fileContent, File ouputDir);
+	
+	enum Backend{
+		PDF, HTML;
+	}
 	
 	class Factory {
 		
-		public static AdocConverter create() {
+		public static AdocConverter create(Backend backend) {
 			
-			return new AdocConverterImpl() ;
+			if(backend.equals(Backend.PDF)) {
+				return new PDFConverter() ;
+			}
+			
+			return new PDFConverter() ;
 		}
 	}
 	
-	class OptionsBuilder {
+	/*class OptionsBuilder {
 		
 		private Options options = new Options();
 		
@@ -93,7 +106,7 @@ public interface AdocConverter {
 			
 		}
 		
-	}
+	}*/
 	
 	
 
