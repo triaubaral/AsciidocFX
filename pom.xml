@@ -36,7 +36,7 @@
 			<groupId>org.spockframework</groupId>
 			<artifactId>spock-core</artifactId>
 			<scope>test</scope>
-		</dependency>		
+		</dependency>
 		<dependency> <!-- enables mocking of classes (in addition to interfaces) -->
 			<groupId>net.bytebuddy</groupId>
 			<artifactId>byte-buddy</artifactId>
@@ -52,7 +52,7 @@
 		</dependency>
 		<dependency> <!-- only required if Hamcrest matchers are used -->
 			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-core</artifactId>			
+			<artifactId>hamcrest-core</artifactId>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -64,6 +64,12 @@
 			<groupId>org.asciidoctor</groupId>
 			<artifactId>asciidoctorj-pdf</artifactId>
 			<version>1.5.0-alpha.16</version>
+		</dependency>
+		<dependency>
+			<groupId>org.asciidoctor</groupId>
+			<artifactId>asciidoctorj-epub3</artifactId>
+			<version>1.5.0-alpha.4</version>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.glassfish</groupId>
