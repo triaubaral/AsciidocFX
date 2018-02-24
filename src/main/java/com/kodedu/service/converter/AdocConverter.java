@@ -14,18 +14,48 @@ public interface AdocConverter {
 	String convertContentToFile(String fileContent, File ouputDir);
 	
 	enum Backend{
-		PDF, HTML;
+		PDF, HTML, DOCBOOK, EPUB3;
+		
+		public String getExtFile() {
+			
+			if(this.name().equals(DOCBOOK.toString())) {
+				return ".xml";
+			}
+			
+			if(this.name().equals(EPUB3.toString())) {
+				return ".epub";
+			}
+			
+			return "."+this.name().toLowerCase();
+			
+		}
 	}
 	
 	class Factory {
 		
 		public static AdocConverter create(Backend backend) {
 			
+			if(backend == null) {
+				throw new IllegalArgumentException("Backend parameter cannot be null !!");
+			}
+			
 			if(backend.equals(Backend.PDF)) {
 				return new PDFConverter() ;
 			}
 			
-			return new PDFConverter() ;
+			if(backend.equals(Backend.HTML)) {
+				return new HTMLConverter() ;
+			}
+			
+			if(backend.equals(Backend.DOCBOOK)) {
+				return new DocbookConverter() ;
+			}
+			
+			if(backend.equals(Backend.EPUB3)) {
+				return new EPUB3Converter() ;
+			}
+			
+			throw new IllegalArgumentException("Converter for "+backend.name()+" output is not implemented.");
 		}
 	}
 	

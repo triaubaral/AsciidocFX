@@ -2,10 +2,10 @@ package com.kodedu.service.converter;
 
 import org.asciidoctor.OptionsBuilder;
 
-class PDFConverter extends DefaultAdocConverter {
+class DocbookConverter extends DefaultAdocConverter {
 	
-	public PDFConverter() {			
-		optionsBuilder = OptionsBuilder.options().backend("pdf");
+	public DocbookConverter() {			
+		optionsBuilder = OptionsBuilder.options().backend("docbook");
 	}
 		
 	
